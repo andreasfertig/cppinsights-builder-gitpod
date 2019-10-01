@@ -3,18 +3,29 @@ FROM andreasfertig/cppinsights-builder:latest
 LABEL maintainer "Andreas Fertig"
 
 # Install compiler, python
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends clang-format-${CLANG_VERSION} clang-tidy-${CLANG_VERSION} gnupg git vim gdb && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update &&                                                                                                          \
+    apt-get install -y --no-install-recommends clang-format-${CLANG_VERSION} clang-tidy-${CLANG_VERSION} gnupg git vim gdb &&  \
+    rm -rf /var/lib/apt/lists/* &&                                                                                             \
+    ln -fs /usr/bin/clang-tidy-${CLANG_VERSION} /usr/bin/clang-tidy &&                                                         \
+    ln -fs /usr/bin/clang-format-${CLANG_VERSION} /usr/bin/clang-format
 
-RUN ln -fs /usr/bin/llvm-config-${CLANG_VERSION} /usr/bin/llvm-config
-RUN ln -fs /usr/bin/clang-tidy-${CLANG_VERSION} /usr/bin/clang-tidy
-RUN ln -fs /usr/bin/clang-format-${CLANG_VERSION} /usr/bin/format-tidy
-
-RUN ln -fs /usr/bin/g++-8 /usr/bin/g++
-RUN ln -fs /usr/bin/g++-8 /usr/bin/c++
-RUN ln -fs /usr/bin/gcc-8 /usr/bin/gcc
-RUN ln -fs /usr/bin/gcc-8 /usr/bin/cc
+# We need this for now to build a more recent version of lcov
+RUN apt-get update &&                                                          \
+    apt-get install -y --no-install-recommends wget build-essential unzip libperlio-gzip-perl libjson-perl &&   \
+    cd /tmp &&                                                                 \
+    wget https://github.com/linux-test-project/lcov/archive/master.zip &&      \
+    unzip master.zip &&                                                        \
+    cd lcov-master &&                                                          \
+    make install &&                                                            \
+    cd / &&                                                                    \
+    rm -rf /tmp/* &&                                                           \
+    apt-get remove --purge -y wget unzip cpp-7 dpkg-dev g++-7 gcc-7 libdpkg-perl make patch xz-utils && \
+    ln -fs /usr/bin/g++-8 /usr/bin/g++ && \
+    ln -fs /usr/bin/g++-8 /usr/bin/c++ && \
+    ln -fs /usr/bin/gcc-8 /usr/bin/gcc && \
+    ln -fs /usr/bin/gcc-8 /usr/bin/cc && \
+    rm -rf /var/lib/apt/lists/* &&                                             \
+    ln -fs /usr/bin/gcov-8 /usr/bin/gcov
 
 ### Gitpod user ###
 # '-l': see https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
