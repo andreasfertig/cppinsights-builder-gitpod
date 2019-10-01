@@ -1,0 +1,9 @@
+script:
+- make build
+- docker images
+- |
+  if [[ "${TRAVIS_BRANCH}" = "master" ]] && [[ "${TRAVIS_PULL_REQUEST}" == "false" ]]; then
+    echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    docker tag andreasfertig/cppinsights-builder-gitpod $DOCKER_USERNAME/cppinsights-builder-gitpod
+    docker push $DOCKER_USERNAME/cppinsights-builder-gitpod
+  fi
