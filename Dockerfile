@@ -3,10 +3,11 @@ FROM andreasfertig/cppinsights-builder:latest
 LABEL maintainer "Andreas Fertig"
 
 # Install compiler, python
-RUN apt-get update &&                                                                                                          \
-    apt-get install -y --no-install-recommends clang-format-${CLANG_VERSION} clang-tidy-${CLANG_VERSION} gnupg git vim gdb &&  \
-    rm -rf /var/lib/apt/lists/* &&                                                                                             \
-    ln -fs /usr/bin/clang-tidy-${CLANG_VERSION} /usr/bin/clang-tidy &&                                                         \
+RUN apt-get update &&                                                                                                                                  \
+    apt-get install -y --no-install-recommends clang-format-${CLANG_VERSION} clang-tidy-${CLANG_VERSION} clangd-${CLANG_VERSION} gnupg git vim gdb &&  \
+    rm -rf /var/lib/apt/lists/* &&                                                                                                                     \
+    ln -fs /usr/bin/clang-tidy-${CLANG_VERSION} /usr/bin/clang-tidy &&                                                                                 \
+    ln -fs /usr/bin/clangd-${CLANG_VERSION} /usr/bin/clangd &&                                                                                         \
     ln -fs /usr/bin/clang-format-${CLANG_VERSION} /usr/bin/clang-format
 
 ### Gitpod user ###
