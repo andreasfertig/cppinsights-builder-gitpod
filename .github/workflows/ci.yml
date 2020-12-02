@@ -1,4 +1,4 @@
-name: C++ Insighs Gitpod Builder Image CI
+name: C++ Insights Gitpod Builder Image CI
 
 on:
   push:
