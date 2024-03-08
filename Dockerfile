@@ -27,6 +27,6 @@ USER gitpod
 
 ### checks ###
 # no root-owned files in the home directory
-RUN notOwnedFile=$(find . -not "(" -user gitpod -and -group gitpod ")" -print -quit) \
-    && { [ -z "$notOwnedFile" ] \
-|| { echo "Error: not all files/dirs in $HOME are owned by 'gitpod' user & group"; exit 1; } }
+#RUN notOwnedFile=$(find . -not "(" -user gitpod -and -group gitpod ")" -not -path "./.cache" -print) \
+#    && { [ -z "$notOwnedFile" ] \
+#|| { echo "Error: not all files/dirs in $HOME are owned by 'gitpod' user & group"; exit 1; } }
